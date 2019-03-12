@@ -1,0 +1,264 @@
+000100* Tricks: PERFORM para-para (skip). STOP RUN. Long lines.
+
+000100* DEFCON23 OpenCTF Rosetta Stone Challenge by Jack Sullivan (Sully) <jack@hunted.codes>
+000100* Compilation:
+000100*    sudo apt-get install open-cobol
+000100*    cobc -x <file>.cbl
+000100*    ./<file>
+
+000200 IDENTIFICATION DIVISION.
+000300 PROGRAM-ID. lower.
+
+000400 DATA DIVISION.
+000500     WORKING-STORAGE SECTION.
+	   01     byte0 PIC 9(5).   
+	   77     byte1 PIC 9(12). 
+	   77     byte2 PIC 9(19).  
+	   01     byte3 PIC 9(27). 
+	   77     byte4 PIC 9(36). 
+	                           
+	   77     INIT0 PIC 9(19).
+	   01     INIT1 PIC 9(27).
+	   77     INIT2 PIC 9(36).
+	   77 	  INIT3 PIC 9(19). 
+	   01     INIT4 PIC 9(27). 
+	   77     INIT5 PIC 9(36).
+	   77     INIT6 PIC 9(19).
+           01     INIT7 PIC 9(27).
+           77     INIT8 PIC 9(36).
+	   77     INIT9 PIC 9(19).
+
+
+000500     LOCAL-STORAGE SECTION.
+	   01     Dl PIC A(50).
+	   01     Km PIC A(50).
+	   01     Fl PIC A(50).
+	   01     BUFF PIC A(50).
+
+           77     SEED PIC 9(19).  
+
+           77     CHAR PIC 9(19).  
+           77     BOOL PIC A(1). 
+           01     CONV PIC 9(1).
+
+
+
+000400 PROCEDURE DIVISION.
+
+010010*   Assign the 5 bytes as key: 205,179,171,250,221
+          BYTEINIT.
+	  MOVE 205 TO byte0
+          MOVE 179 TO byte1
+          MOVE 171 TO byte2
+          MOVE 250 TO byte3
+          MOVE 221 TO byte4.
+
+010010*   Display default message hint
+          DLDISP.
+          MOVE "Pull the plug to power me up" to Dl.
+          DISPLAY ""Dl.
+
+          MOVE 0 to CONV.
+
+010010*   Construct the output key for ASM: "OG Decod3r"
+          KMINIT.
+          MOVE 42 TO SEED
+          COMPUTE INIT0 = SEED + 37.
+          COMPUTE INIT1 = INIT0 - 8.
+          COMPUTE INIT2 = INIT1 - 39.
+          COMPUTE INIT3 = INIT2 + 36.
+          COMPUTE INIT4 = INIT3 + 33.
+          COMPUTE INIT5 = INIT4 - 2.
+          COMPUTE INIT6 = INIT5 + 12.
+          COMPUTE INIT7 = INIT6 - 11.
+          COMPUTE INIT8 = INIT7 - 49.
+          COMPUTE INIT9 = INIT8 + 63.
+
+010010*   Convert the key integers into ASCII values
+          KMCONVERTSTART.
+          MOVE 1 to CONV.
+          INIT10. MOVE INIT0 TO CHAR GO TO CONVERT.
+          INIT11. MOVE INIT1 TO CHAR GO TO CONVERT.
+          INIT12. MOVE INIT2 TO CHAR GO TO CONVERT.
+          INIT13. MOVE INIT3 TO CHAR GO TO CONVERT.
+          INIT14. MOVE INIT4 TO CHAR GO TO CONVERT.
+          INIT15. MOVE INIT5 TO CHAR GO TO CONVERT.
+          INIT16. MOVE INIT6 TO CHAR GO TO CONVERT.
+          INIT17. MOVE INIT7 TO CHAR GO TO CONVERT.
+          INIT18. MOVE INIT8 TO CHAR GO TO CONVERT.
+          INIT19. MOVE INIT9 TO CHAR GO TO CONVERT.
+
+          KMCONVERTCONT.
+          IF CHAR IS = INIT0 THEN GO TO INIT11.
+          IF CHAR IS = INIT1 THEN GO TO INIT12.
+          IF CHAR IS = INIT2 THEN GO TO INIT13.
+          IF CHAR IS = INIT3 THEN GO TO INIT14.
+          IF CHAR IS = INIT4 THEN GO TO INIT15.
+          IF CHAR IS = INIT5 THEN GO TO INIT16.
+          IF CHAR IS = INIT6 THEN GO TO INIT17.
+          IF CHAR IS = INIT7 THEN GO TO INIT18.
+          IF CHAR IS = INIT8 THEN GO TO INIT19.
+          IF CHAR IS = INIT9 THEN MOVE BUFF TO Km GO TO FLINIT
+          END-IF.
+
+010010*   Construct the lower flag: "Tr1but3]" from 205,179,171,250,221
+          FLINIT.
+          MOVE 2 to CONV.
+          MOVE "" to BUFF.
+          COMPUTE INIT0 = byte0 - 121.
+          COMPUTE INIT1 = byte1 - 65.
+          COMPUTE INIT2 = byte2 - 122.
+          COMPUTE INIT3 = byte3 - 152.
+          COMPUTE INIT4 = byte4 - 104.
+          COMPUTE INIT5 = byte0 - 89.
+          COMPUTE INIT6 = byte1 - 128.
+          COMPUTE INIT7 = byte2 - 78.
+          COMPUTE INIT8 = byte3 - 115.
+          COMPUTE INIT9 = byte4 - 132.
+
+010010*   Convert the flag integers into ASCII values
+          FLCONVERTSTART.
+          IN1T10. MOVE INIT0 TO CHAR GO TO CONVERT.
+          IN1T11. MOVE INIT1 TO CHAR GO TO CONVERT.
+          IN1T12. MOVE INIT2 TO CHAR GO TO CONVERT.
+          IN1T13. MOVE INIT3 TO CHAR GO TO CONVERT.
+          IN1T14. MOVE INIT4 TO CHAR GO TO CONVERT.
+          IN1T15. MOVE INIT5 TO CHAR GO TO CONVERT.
+          IN1T16. MOVE INIT6 TO CHAR GO TO CONVERT.
+          IN1T17. MOVE INIT7 TO CHAR GO TO CONVERT.
+          IN1T18. MOVE INIT8 TO CHAR GO TO CONVERT.
+          IN1T19. MOVE INIT9 TO CHAR GO TO CONVERT.
+
+          FLCONVERTCONT.
+          IF CHAR IS = INIT0 THEN GO TO IN1T11.
+          IF CHAR IS = INIT1 THEN GO TO IN1T12.
+          IF CHAR IS = INIT2 THEN GO TO IN1T13.
+          IF CHAR IS = INIT3 THEN GO TO IN1T14.
+          IF CHAR IS = INIT4 THEN GO TO IN1T15.
+          IF CHAR IS = INIT5 THEN GO TO IN1T16.
+          IF CHAR IS = INIT6 THEN GO TO IN1T17.
+          IF CHAR IS = INIT7 THEN GO TO IN1T18.
+          IF CHAR IS = INIT8 THEN GO TO IN1T19.
+          IF CHAR IS = INIT9 THEN 
+             STRING
+                  BUFF (1:8)
+		  INTO Fl
+             END-STRING
+             GO TO FINISH
+          END-IF.
+
+111111    CONVERT.
+          EVALUATE CHAR
+		WHEN 32 MOVE " " TO BOOL
+		WHEN 33 MOVE "!" TO BOOL
+		WHEN 34 MOVE '"' TO BOOL
+		WHEN 35 MOVE "#" TO BOOL
+		WHEN 36 MOVE "$" TO BOOL
+		WHEN 37 MOVE "%" TO BOOL
+		WHEN 38 MOVE "&" TO BOOL
+		WHEN 39 MOVE "'" TO BOOL
+		WHEN 40 MOVE "(" TO BOOL
+		WHEN 41 MOVE ")" TO BOOL
+		WHEN 42 MOVE "*" TO BOOL
+		WHEN 43 MOVE "+" TO BOOL
+		WHEN 44 MOVE "," TO BOOL
+		WHEN 45 MOVE "-" TO BOOL
+		WHEN 46 MOVE "." TO BOOL
+		WHEN 47 MOVE "/" TO BOOL
+		WHEN 48 MOVE "0" TO BOOL
+		WHEN 49 MOVE "1" TO BOOL
+		WHEN 50 MOVE "2" TO BOOL
+		WHEN 51 MOVE "3" TO BOOL
+		WHEN 52 MOVE "4" TO BOOL
+		WHEN 53 MOVE "5" TO BOOL
+		WHEN 54 MOVE "6" TO BOOL
+		WHEN 55 MOVE "7" TO BOOL
+		WHEN 56 MOVE "8" TO BOOL
+		WHEN 57 MOVE "9" TO BOOL
+		WHEN 58 MOVE ":" TO BOOL
+		WHEN 59 MOVE ";" TO BOOL
+		WHEN 60 MOVE "<" TO BOOL
+		WHEN 61 MOVE "=" TO BOOL
+		WHEN 62 MOVE ">" TO BOOL
+		WHEN 63 MOVE "?" TO BOOL
+		WHEN 64 MOVE "@" TO BOOL
+		WHEN 65 MOVE "A" TO BOOL
+		WHEN 66 MOVE "B" TO BOOL
+		WHEN 67 MOVE "C" TO BOOL
+		WHEN 68 MOVE "D" TO BOOL
+		WHEN 69 MOVE "E" TO BOOL
+		WHEN 70 MOVE "F" TO BOOL
+		WHEN 71 MOVE "G" TO BOOL
+		WHEN 72 MOVE "H" TO BOOL
+		WHEN 73 MOVE "I" TO BOOL
+		WHEN 74 MOVE "J" TO BOOL
+		WHEN 75 MOVE "K" TO BOOL
+		WHEN 76 MOVE "L" TO BOOL
+		WHEN 77 MOVE "M" TO BOOL
+		WHEN 78 MOVE "N" TO BOOL
+		WHEN 79 MOVE "O" TO BOOL
+		WHEN 80 MOVE "P" TO BOOL
+		WHEN 81 MOVE "Q" TO BOOL
+		WHEN 82 MOVE "R" TO BOOL
+		WHEN 83 MOVE "S" TO BOOL
+		WHEN 84 MOVE "T" TO BOOL
+		WHEN 85 MOVE "U" TO BOOL
+		WHEN 86 MOVE "V" TO BOOL
+		WHEN 87 MOVE "W" TO BOOL
+		WHEN 88 MOVE "X" TO BOOL
+		WHEN 89 MOVE "Y" TO BOOL
+		WHEN 90 MOVE "Z" TO BOOL
+		WHEN 91 MOVE "[" TO BOOL
+		WHEN 92 MOVE "\" TO BOOL
+		WHEN 93 MOVE "]" TO BOOL
+		WHEN 94 MOVE "^" TO BOOL
+		WHEN 95 MOVE "_" TO BOOL
+		WHEN 96 MOVE "`" TO BOOL
+		WHEN 97 MOVE "a" TO BOOL
+		WHEN 98 MOVE "b" TO BOOL
+		WHEN 99 MOVE "c" TO BOOL
+		WHEN 100 MOVE "d" TO BOOL
+		WHEN 101 MOVE "e" TO BOOL
+		WHEN 102 MOVE "f" TO BOOL
+		WHEN 103 MOVE "g" TO BOOL
+		WHEN 104 MOVE "h" TO BOOL
+		WHEN 105 MOVE "i" TO BOOL
+		WHEN 106 MOVE "j" TO BOOL
+		WHEN 107 MOVE "k" TO BOOL
+		WHEN 108 MOVE "l" TO BOOL
+		WHEN 109 MOVE "m" TO BOOL
+		WHEN 110 MOVE "n" TO BOOL
+		WHEN 111 MOVE "o" TO BOOL
+		WHEN 112 MOVE "p" TO BOOL
+		WHEN 113 MOVE "q" TO BOOL
+		WHEN 114 MOVE "r" TO BOOL
+		WHEN 115 MOVE "s" TO BOOL
+		WHEN 116 MOVE "t" TO BOOL
+		WHEN 117 MOVE "u" TO BOOL
+		WHEN 118 MOVE "v" TO BOOL
+		WHEN 119 MOVE "w" TO BOOL
+		WHEN 120 MOVE "x" TO BOOL
+		WHEN 121 MOVE "y" TO BOOL
+		WHEN 122 MOVE "z" TO BOOL
+		WHEN 123 MOVE "{" TO BOOL
+		WHEN 124 MOVE "|" TO BOOL
+		WHEN 125 MOVE "}" TO BOOL
+		WHEN 126 MOVE "~" TO BOOL	
+          END-EVALUATE.
+
+          CONCAT.
+          STRING 
+          BUFF DELIMITED BY SPACE 
+          BOOL DELIMITED BY SIZE 
+          INTO BUFF
+	  END-STRING.
+
+          IF CONV IS = 1 THEN GO TO KMCONVERTCONT.
+          IF CONV IS = 2 THEN GO TO FLCONVERTCONT
+	  END-IF.
+
+          FINISH.
+	  DISPLAY "Km: "Km.
+	  DISPLAY "Fl: "Fl.
+          DISPLAY "Ending program"	
+000600    STOP RUN.
