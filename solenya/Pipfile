@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[scripts]
+start = "uwsgi --ini uwsgi.ini"
+
+[dev-packages]
+
+[packages]
+django = "*"
+pipfile = "*"
+uwsgi = "*"
+whitenoise = "*"
+
+[requires]
+python_version = "3.5"

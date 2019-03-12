@@ -1,0 +1,13 @@
+[Unit]
+Description=INetSim Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root
+ExecStart=/usr/bin/inetsim
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
